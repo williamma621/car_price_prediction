@@ -19,8 +19,8 @@ CATEGORICAL_COLUMNS = ['make', 'model', 'body', 'trim', 'exteriorColor',
 NUMERICAL_COLUMNS = ['year', 'mileage', 'newTireCount',
     'mpgCity', 'mpgHighway', 'cylinders', 'horsepower', 'horsepowerRpm',
     'engineSize', 'engineTorque', 'engineTorqueRpm']
-TARGET_ENCODINGS = json.load(open('DATA/target_values.json', 'r'))
 
+target_encodings = json.load(open('DATA/target_values.json', 'r'))
 categorical_options = json.load(open('DATA/categorical_options.json', 'r'))
 numerical_values = NUMERICAL_COLUMNS.copy()
 
@@ -36,21 +36,18 @@ def predict():
     print(request.form)
     print(user_input)
    
-    for col in CATEGORICAL_COLUMNS:  # Your categorical columns
+    for col in CATEGORICAL_COLUMNS:
         if col in user_input:
-            # Use your pre-calculated target encodings
-            template[col] = TARGET_ENCODINGS[col].get(user_input[col], np.nan)
+            # convert to target encodings
+            template[col] = target_encodings[col].get(user_input[col], np.nan)
     
-    # 5. Fill numerical fields
-    for col in NUMERICAL_COLUMNS:  # ['year', 'mileage', etc.]
+    for col in NUMERICAL_COLUMNS:
         if col in user_input:
             template[col] = pd.to_numeric(user_input[col])
     
-    # 6. Handle missing values (example: fill with median)
     # input_template = input_template.fillna({
     #     'year': df_train['year'].median(),
     #     'mileage': df_train['mileage'].median(),
-    #     # Add other columns as needed
     # })
 
     prediction = ML_MODEL.predict(template)[0]
