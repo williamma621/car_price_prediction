@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Price Predictor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 Car Price Predictor</h1>
+        
+        <form id="prediction-form">
+            {% for field, options in categorical_input.items() %}
+                <label for="{{ field }}">{{ field|title }}:</label>
+                <select id="{{ field }}" name="{{ field }}" required>
+                    <option value="">Select {{ field|title }}</option>
+                    {% for option in options %}
+                        <option value="{{ option }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+            {% endfor %}
+
+            {% for field in numerical_input %}
+            <label for="{{ field }}">{{ field|title }}</label>
+            <input class = "number_input" type="number" id="{{ field }}" name="{{ field }}">
+            {% endfor %}
+            
+            <button type="submit">Estimate Price</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
